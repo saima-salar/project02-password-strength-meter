@@ -29,6 +29,10 @@ st.markdown("""
 st.title("🔐 Password Strength Checker")
 st.markdown("Enter your password below to check its security level.🔍")
 
+# Initialize session state for toggling password visibility
+if "password_visible" not in st.session_state:
+    st.session_state.password_visible = False
+
 # Function to check password strength
 def check_password_strength(password):
     score = 0
@@ -68,8 +72,22 @@ def check_password_strength(password):
             for item in feedback:
                 st.write(item)
 
-# Password Input
-password = st.text_input("Enter your password:", type="password", help="Ensure your password is at least 8 characters long.🔐")
+# Toggle password visibility function
+def toggle_password_visibility():
+    st.session_state.password_visible = not st.session_state.password_visible
+
+# Password Input with Show/Hide toggle
+password = st.text_input(
+    "Enter your password:",
+    type="text" if st.session_state.password_visible else "password",  # Toggle input type
+    help="Ensure your password is at least 8 characters long.🔐"
+)
+
+# Show/Hide Password Button
+st.button(
+    "👁️ Show Password" if not st.session_state.password_visible else "🙈 Hide Password",
+    on_click=toggle_password_visibility
+)
 
 # Center the button using HTML
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
